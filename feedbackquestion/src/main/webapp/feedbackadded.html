@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>feedback added</title>
+</head>
+<body>
+    <h1>Admin Control Page</h1>
+    <p>View all feedback</p>
+    <form action="admin/viewFeedback">
+    <input type="hidden" name="userEmail" value="{{userEmail}}" />
+        <input type="submit" value="View Feedback">
+    </form>
+    <br>
+     <br>
+      <br>
+      <p>View  feedback by email</p>
+    <form action="admin/viewFeedbackbyEmail">
+    Enter email :<input type="text" name="userEmail"  />
+        <input type="submit" value="View Feedback By Email">
+    </form>
+</body>
+</html>

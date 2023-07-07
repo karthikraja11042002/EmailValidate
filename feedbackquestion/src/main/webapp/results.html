@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Results</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="script/feedbackquestion.js"></script>
+</head>
+<body>
+	
+<script>
+$(document).ready(function() {
+    let cookie = {};
+    document.cookie.split(';').forEach(function(el) {
+        let [k, v] = el.split('=');
+        cookie[k.trim()] = v;
+    });
+    alert(JSON.stringify(cookie.userEmail));
+
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: "/getResult",
+        success: function(data) {
+            document.writeln("<h2>" + data.answer1 + "</h2>");
+            document.writeln("<h2>" + data.answer2 + "</h2>");
+            document.writeln("<h2>" + data.answer3 + "</h2>");
+            document.writeln("<h2>" + data.answer4 + "</h2>");
+            document.writeln("<h2>" + data.answer5 + "</h2>");
+            document.writeln('<button id="sendEmailButton">Send Email</button>');
+        }
+    });
+    
+      
+    $('#sendEmailButton').click(function() {
+    	var emailAnswers = {
+            // Retrieve user answers from cookies or other sources
+            userEmail:cookie.userEmail,
+            answer1: cookie.answer1,
+            answer2: cookie.answer2,
+            answer3: cookie.answer3,
+            answer4: cookie.answer4,
+            answer5: cookie.answer5
+        };
+        alert("My Email"+ JSON.stringify(emailAnswers));
+
+        $.ajax({
+            type: "post",
+            datatype: "text",
+            contenttype: "application/json",
+            data: { emailAnswers: JSON.stringify(emailAnswers)},
+            url: "/sendEmail",
+            success: function(data) {
+                location.href = data;
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+});
+
+</script>
+
+</body>
+</html>

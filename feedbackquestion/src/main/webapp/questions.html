@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Questions</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="script/feedbackquestion.js"></script>
+</head>
+<body>
+    <h1>Feedback Questions</h1>
+    <h2 id='uname'></h2>
+    <h2 id='uage'></h2>
+    <h2 id='uemail'></h2>
+    <div id="feedbackForm"></div>
+    <button id="submitFeedback">Submit Feedback</button>
+    <script>
+    $(document).ready(function() {
+        let cookie = {};
+        document.cookie.split(';').forEach(function(el) {
+            let [k, v] = el.split('=');
+            cookie[k.trim()] = v;
+        });
+       // alert(JSON.stringify(cookie));
+        document.getElementById('uname').innerText = cookie.userName;
+        document.getElementById('uage').innerText = cookie.userAge;
+        document.getElementById('uemail').innerText = cookie.userEmail;
+    });
+    </script>
+</body>
+</html>

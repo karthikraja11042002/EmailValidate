@@ -1,18 +1,26 @@
 package com.exterro.feedbackquestion.controller;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.exterro.feedbackquestion.entity.FeedBackEntity;
 import com.exterro.feedbackquestion.entity.UserEntity;
+import com.exterro.feedbackquestion.request.EmailRequest;
 import com.exterro.feedbackquestion.services.FeedBackServices;
 import com.exterro.feedbackquestion.services.QuestionServices;
 import com.exterro.feedbackquestion.services.UserServices;
@@ -26,6 +34,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class FeedBackController {
+	private final JavaMailSender javaMailSender;
 
 	private static final Logger logger = LoggerFactory.getLogger(FeedBackController.class);
 
@@ -37,6 +46,12 @@ public class FeedBackController {
 
 	@Autowired
 	private UserServices userServices;
+	
+
+    @Autowired
+    public FeedBackController(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
 	@GetMapping("/home")
 	@ResponseBody
@@ -229,4 +244,40 @@ public class FeedBackController {
 		FeedBackEntity feedback = feedBackServices.viewFeedBackById(Integer.parseInt(sid));
 		return ResponseEntity.ok(feedback);
 	}
+	
+
+    @PostMapping("/getEmail")
+    @ResponseBody
+    public ResponseEntity<String> sendEmail(@RequestParam String emailAnswers) {
+        try {
+        	
+            ObjectMapper objectMapper = new ObjectMapper();
+            EmailRequest emailRequest = objectMapper.readValue(emailAnswers, EmailRequest.class);
+            String recipientEmail = emailRequest.getUserEmail();
+            String subject = "FeedBack Results";
+            String body = "Hii,"+ "\n" +
+                          "Your FeedBack Results Are :"+ "\n" +
+                           emailRequest.getAnswer1() + "\n" +
+                           emailRequest.getAnswer2() + "\n" +
+                           emailRequest.getAnswer3() + "\n" +
+                           emailRequest.getAnswer4() + "\n" +
+                           emailRequest.getAnswer5();
+            
+
+            if (recipientEmail == null || subject == null || body == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing email details.");
+            }
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(recipientEmail);
+            message.setSubject(subject);
+            message.setText(body);
+            javaMailSender.send(message);
+            return ResponseEntity.ok("emailsuccessfull.html");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email data format.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send email.");
+        }
+    }
 }

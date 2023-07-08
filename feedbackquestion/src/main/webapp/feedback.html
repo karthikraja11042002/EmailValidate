@@ -3,23 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>feedback</title>
+  <title>Feedback</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="script/feedbackquestion.js"></script>
 </head>
 <body>
   <h1>Add User Details</h1>
-  ENTER USERNAME :
+  ENTER USERNAME:
   <input type="text" name="userName" id="userName" required="required">
-  <br>
-  <br>
+  <br><br>
   ENTER USER AGE:
-  <input type="number" name="userAge" id="userAge" required="required">
-  <br>
-  <br>
-  ENTER USER EMAIL :
-  <input type="text" name="userEmail" id="userEmail" required="required">
-  <br>
-  <br>
+  <input type="number" name="userAge" id="userAge" required="required" min="0">
+  <br><br>
+  ENTER USER EMAIL:
+  <input type="email" name="userEmail" id="userEmail" required="required">
+  <br><br>
   <button id="addRegister">Register</button>
+
+  <script>
+    // Age validation
+    document.getElementById("userAge").addEventListener("input", function() {
+      var ageInput = document.getElementById("userAge");
+      if (ageInput.validity.typeMismatch) {
+        ageInput.setCustomValidity("Please enter a valid age as an integer.");
+      } else {
+        ageInput.setCustomValidity("");
+      }
+    });
+
+    // Email validation
+    document.getElementById("userEmail").addEventListener("input", function() {
+      var emailInput = document.getElementById("userEmail");
+      if (emailInput.validity.typeMismatch) {
+        emailInput.setCustomValidity("Please enter a valid email address.");
+      } else {
+        emailInput.setCustomValidity("");
+      }
+    });
+  </script>
 </body>
+</html>

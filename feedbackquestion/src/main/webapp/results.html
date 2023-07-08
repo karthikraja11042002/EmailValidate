@@ -3,91 +3,64 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Results</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script src="script/feedbackquestion.js"></script>
 </head>
 <body>
 <input type='hidden' id='u1'>
-
-<h2 id='a1'></h2>
-<h2 id='a2'></h2>
-<h2 id='a3'></h2>
-<h2 id='a4'></h2>
-<h2 id='a5'></h2>
-<button id ="sendEmailButton">SendEmail</button>
-	<script>
+<div id="resultsContainer"></div>
+<button id="sendEmailButton">Send Email</button>
+<script>
 $(document).ready(function() {
-	document.getElementById('sendEmailButton').style.display='none';
+    document.getElementById('sendEmailButton').style.display = 'none';
 
     $.ajax({
         type: "get",
         dataType: "json",
         url: "/getResult",
         success: function(data) {
-        	document.getElementById('u1').value = data.userEmail.userEmail;
-            document.getElementById('a1').innerText = data.answer1;
-            document.getElementById('a2').innerText = data.answer2;
-            document.getElementById('a3').innerText = data.answer3;
-            document.getElementById('a4').innerText = data.answer4;
-            document.getElementById('a5').innerText = data.answer5;
-            document.getElementById('sendEmailButton').style.display='block';
-            /* document.writeln("<h2 id>" +  + "</h2>");
-            document.writeln("<h2>" + data.answer2 + "</h2>");
-            document.writeln("<h2>" + data.answer3 + "</h2>");
-            document.writeln("<h2>" + data.answer4 + "</h2>");
-            document.writeln("<h2>" + data.answer5 + "</h2>"); */
-           // document.writeln('<button id="sendEmailButton">Send Email</button>');
+            document.getElementById('u1').value = data.userEmail.userEmail;
+            displayResults(data);
+            document.getElementById('sendEmailButton').style.display = 'block';
         }
     });
 });
-    
+
+function displayResults(data) {
+    var resultsContainer = $('#resultsContainer');
+    for (var i = 1; i <= 5; i++) {
+        var answer = data['answer' + i];
+        resultsContainer.append('<h2 id="a' + i + '">' + answer + '</h2>');
+    }
+}
+
 $(document).ready(function() {
     $('#sendEmailButton').click(function() {
-    	var emailAnswers = {
-            // Retrieve user answers from cookies or other sources
-            userEmail:document.getElementById('u1').value,
-            answer1: document.getElementById('a1').innerText,
-            answer2: document.getElementById('a2').innerText,
-            answer3: document.getElementById('a3').innerText,
-            answer4: document.getElementById('a4').innerText,
-            answer5: document.getElementById('a5').innerText
-            
+        var emailAnswers = {
+            userEmail: document.getElementById('u1').value
         };
         
-    	alert("My Button Clicked");
+        for (var i = 1; i <= 5; i++) {
+            var answer = $('#a' + i).text();
+            emailAnswers['answer' + i] = answer;
+        }
+        
         $.ajax({
             type: "post",
             url: "/getEmail",
             datatype: "text",
             contenttype: "application/json",
             data: { emailAnswers: JSON.stringify(emailAnswers)},
-            
             success: function(data) {
                 location.href = data;
-                alert("From Controller My Email"+ JSON.stringify(emailAnswers));
+                alert("Email sent successfully!");
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseText);
-                
             } 
         });
     }); 
-});               
-    
-  
-    
-    
-      
-   
+});
 </script>
-
 </body>
 </html>
-
-
-
-
-
-
-

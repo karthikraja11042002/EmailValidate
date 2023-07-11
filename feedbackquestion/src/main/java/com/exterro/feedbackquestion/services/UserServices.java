@@ -12,6 +12,7 @@ public interface UserServices {
 
 	public List<UserEntity> viewAllUser();
 	
-	public UserEntity viewUser (String userEmail);
+	
+	public UserEntity viewUserbyId (int userId);
 
 }

@@ -1,6 +1,7 @@
 package com.exterro.feedbackquestion.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class  QuestionServicesImpl implements QuestionServices {
 	public List<QuestionEntity> viewAllQuestion() {
 	
 		return questionDao.findAll();
+	}
+
+	@Override
+	public Optional<QuestionEntity> viewQuestionById(int questionId) {
+	
+		return questionDao.findById(questionId);
 	}
 
 }

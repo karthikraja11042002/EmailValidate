@@ -35,7 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/feedback.html", "/script/feedbackquestion.js", "/submitFeedback", "/giveFeedback","/submitRegistration", "/questions.html","/feedbackForm","/results.html","/viewFeedbackbyEmail","/getResult","/getEmail","/emailsuccessfull.html");
+        return (web) -> web.ignoring().requestMatchers("/feedback.html", "/script/feedbackquestion.js", "/submitFeedback", "/giveFeedback","/submitRegistration", "/questions.html","/feedbackForm","/results.html","/viewFeedbackbyEmail","/getCookies","/getResult","/getEmail","/emailsuccessfull.html");
     }
 
     @Bean

@@ -16,10 +16,10 @@ $(document).ready(function() {
 
     $.ajax({
         type: "get",
-        dataType: "json",
         url: "/getResult",
+        datatype: "json",   
         success: function(data) {
-            document.getElementById('u1').value = data.userEmail.userEmail;
+            document.getElementById('u1').value = data.userId.userEmail;
             displayResults(data);
             document.getElementById('sendEmailButton').style.display = 'block';
         }

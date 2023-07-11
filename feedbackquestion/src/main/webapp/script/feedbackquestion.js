@@ -1,13 +1,12 @@
 $(document).ready(function() {
 	$('#addRegister').click(function() {
-		 //alert("message from js");
+
 		var user = {
 			userName: $("#userName").val(),
 			userAge: $("#userAge").val(),
 			userEmail: $("#userEmail").val(),
 		};
 
-	//	alert("My data " + JSON.stringify(user));
 
 		$.ajax({
 			type: "post",
@@ -16,7 +15,6 @@ $(document).ready(function() {
 			data: { userData: JSON.stringify(user) },
 			url: "/submitRegistration",
 			success: function(data) {
-				console.log(document.cookie);
 				location.href = data;
 
 			},
@@ -27,8 +25,8 @@ $(document).ready(function() {
 $(document).ready(function() {
 	$.ajax({
 		type: "get",
-		dataType: "json",
-		contentType: "application/json",
+		datatype: "json",
+		contenttype: "application/json",
 		url: "/giveFeedback",
 		success: function(data) {
 			var feedbackForm = $("#feedbackForm");
@@ -59,39 +57,39 @@ $(document).ready(function() {
 		},
 	});
 	$(document).ready(function() {
-    $('#submitFeedback').click(function() {
-        var userAnswers = {};
-        for (var i = 1; i <= 5; i++) {
-            var answer = "";
-            for (var j = 1; j <= 4; j++) {
-                var optionId = 'op' + i + j;
-                if (document.getElementById(optionId).checked) {
-                    answer = document.getElementById(optionId).value;
-                    break;
-                }
-            }
-            if (answer === "") {
-                alert("Please fill all the values");
-                return;
-            }
-            userAnswers['answer' + i] = answer;
-        }
-        alert(JSON.stringify(userAnswers));
+		$('#submitFeedback').click(function() {
+			var userAnswers = {};
+			for (var i = 1; i <= 5; i++) {
+				var answer = "";
+				for (var j = 1; j <= 4; j++) {
+					var optionId = 'op' + i + j;
+					if (document.getElementById(optionId).checked) {
+						answer = document.getElementById(optionId).value;
+						break;
+					}
+				}
+				if (answer === "") {
+					alert("Please fill all the values");
+					return;
+				}
+				userAnswers['answer' + i] = answer;
+			}
+			alert(JSON.stringify(userAnswers));
 
-        $.ajax({
-            type: "post",
-            datatype: "text",
-            contenttype: "application/json",
-           data: { userAnswers: JSON.stringify(userAnswers)},
-            url: "/submitFeedback",
-            success: function(data) {
-				location.href = data;
-			//	alert(JSON.stringify(cookie));
-				 
-				
-            },
-        });
-    });
-});
+			$.ajax({
+				type: "post",
+				datatype: "text",
+				contenttype: "application/json",
+				url: "/submitFeedback",
+				data: { userAnswers: JSON.stringify(userAnswers) },
+				success: function(data) {
+					location.href = data;
+					
+
+
+				},
+			});
+		});
+	});
 });
 

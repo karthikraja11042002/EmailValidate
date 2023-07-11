@@ -26,10 +26,11 @@ public class UserServicesImpl implements UserServices {
 		return userDao.findAll();
 	}
 
+
 	@Override
-	public UserEntity viewUser(String userEmail) {
+	public UserEntity viewUserbyId(int userId) {
 		
-		return userDao.findById(userEmail).orElse(null);
+		return userDao.findById(userId).orElse(null);
 	}
 
 }
